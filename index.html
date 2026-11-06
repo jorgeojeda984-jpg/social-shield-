@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Social Shield · Simulación ética de phishing</title>
+<meta name="description" content="Social Shield: plataforma de simulación controlada y autorizada de phishing para medir y fortalecer la resistencia humana ante la ingeniería social.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff; --bg2:#f6f8fa; --line:#e3e8ee;
+  --text:#1f2937; --muted:#5b6575; --accent:#0f8a68;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif;line-height:1.7;font-size:17px}
+a{color:var(--accent)}
+h1,h2,h3{line-height:1.25;font-weight:700}
+.wrap{max-width:960px;margin:0 auto;padding:0 20px}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:60px}
+.brand{display:flex;align-items:center;gap:8px;font-weight:700;color:var(--text);text-decoration:none}
+.brand svg{width:24px;height:24px}
+.links{display:flex;gap:24px;font-size:.95rem}
+.links a{color:var(--muted);text-decoration:none}
+.links a:hover{color:var(--accent)}
+.menu-btn{display:none;background:none;border:1px solid var(--line);border-radius:6px;padding:4px 10px;font-size:1rem;cursor:pointer}
+
+/* HERO */
+.hero{padding:80px 0 70px;text-align:center}
+.hero small{color:var(--accent);font-weight:600;font-size:.85rem}
+.hero h1{font-size:clamp(2rem,5vw,3rem);margin:12px 0 18px}
+.hero p{color:var(--muted);max-width:620px;margin:0 auto 28px}
+.btn{display:inline-block;padding:11px 22px;border-radius:8px;font-weight:600;text-decoration:none;margin:4px}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-ghost{border:1px solid var(--line);color:var(--text)}
+
+/* SECTIONS */
+section{padding:70px 0;border-top:1px solid var(--line)}
+section.alt{background:var(--bg2)}
+h2{font-size:clamp(1.6rem,3.5vw,2rem);margin-bottom:12px}
+.sub{color:var(--muted);max-width:680px;margin-bottom:36px}
+.grid{display:grid;gap:18px}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+.box{background:#fff;border:1px solid var(--line);border-radius:10px;padding:22px}
+.box h3{font-size:1.05rem;margin-bottom:6px}
+.box p{color:var(--muted);font-size:.95rem}
+.stat{font-size:2rem;font-weight:700;color:var(--accent)}
+.box small{display:block;color:var(--muted);font-size:.8rem;margin-top:8px}
+
+/* PASOS */
+ol.steps{list-style:none;counter-reset:s;display:grid;gap:12px;margin-bottom:36px}
+ol.steps li{counter-increment:s;display:flex;gap:14px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px 18px}
+ol.steps li::before{content:counter(s);flex:none;width:28px;height:28px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-weight:700;font-size:.9rem}
+ol.steps b{display:block}
+ol.steps span{color:var(--muted);font-size:.95rem}
+
+/* LISTA CHECK */
+ul.check{list-style:none;display:grid;gap:10px}
+ul.check li{padding-left:28px;position:relative}
+ul.check li::before{content:"✓";position:absolute;left:0;color:var(--accent);font-weight:700}
+ul.check span{color:var(--muted)}
+
+/* TABLAS */
+.table{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:#fff}
+table{border-collapse:collapse;width:100%;font-size:.93rem}
+th,td{padding:10px 14px;border-bottom:1px solid var(--line);text-align:left}
+th{background:var(--bg2);font-weight:600}
+tr:last-child td{border-bottom:none}
+
+/* PRIORIDADES */
+.prio h3{font-size:1rem;margin-bottom:10px}
+.prio ul{padding-left:18px;color:var(--muted);font-size:.93rem;display:grid;gap:6px}
+
+/* EQUIPO */
+.team li{list-style:none;background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px 18px}
+.team b{display:block}
+.team span{color:var(--muted);font-size:.9rem}
+
+/* FOOTER */
+footer{border-top:1px solid var(--line);padding:50px 0 30px;color:var(--muted);font-size:.9rem}
+footer .wrap{display:grid;grid-template-columns:1fr 1fr;gap:40px}
+footer ol{padding-left:18px;display:grid;gap:4px}
+footer ol a{color:var(--muted)}
+.copy{text-align:center;margin-top:30px;padding-top:20px;border-top:1px solid var(--line);font-size:.85rem}
+
+/* RESPONSIVE */
+@media (max-width:800px){
+  .g3,.g4{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:640px){
+  .links{display:none;position:absolute;top:60px;left:0;right:0;flex-direction:column;gap:0;background:#fff;border-bottom:1px solid var(--line)}
+  .links.open{display:flex}
+  .links a{padding:12px 20px;border-top:1px solid var(--line)}
+  .menu-btn{display:block}
+  .g2,.g3,.g4,footer .wrap{grid-template-columns:1fr}
+  section{padding:54px 0}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="wrap">
+    <a href="#inicio" class="brand">
+      <svg viewBox="0 0 64 64" fill="none"><path d="M32 4 8 13v17c0 15 10 26 24 30 14-4 24-15 24-30V13L32 4Z" fill="#0f8a68"/><path d="m22 32 7 7 13-14" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Social Shield
+    </a>
+    <button class="menu-btn" aria-label="Abrir menú" onclick="document.querySelector('.links').classList.toggle('open')">☰</button>
+    <div class="links">
+      <a href="#problema">Problema</a>
+      <a href="#solucion">Solución</a>
+      <a href="#seguridad">Ética</a>
+      <a href="#plan">Plan</a>
+      <a href="#equipo">Equipo</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero" id="inicio">
+  <div class="wrap">
+    <small>Proyecto Integrador · UPY · TSU Seguridad en Redes</small>
+    <h1>Entrena a las personas.<br>Protege la organización.</h1>
+    <p>Social Shield es una plataforma web de <b>simulación controlada y autorizada de phishing</b> que mide cómo responden los usuarios ante la ingeniería social y convierte cada error en una lección, sin recopilar jamás credenciales reales.</p>
+    <a href="#solucion" class="btn btn-primary">Cómo funciona</a>
+    <a href="#plan" class="btn btn-ghost">Ver plan de desarrollo</a>
+  </div>
+</header>
+
+<!-- PROBLEMA -->
+<section id="problema">
+  <div class="wrap">
+    <h2>El problema: el eslabón más atacado es el humano</h2>
+    <p class="sub">La ingeniería social supera controles técnicos porque explota la confianza, la urgencia y la autoridad. Y ya no llega solo por correo: también por SMS, llamadas, redes sociales y apps de mensajería.</p>
+    <div class="grid g4">
+      <div class="box"><div class="stat">41%</div><p>de las brechas por ingeniería social usaron vectores distintos al correo.</p><small>Verizon DBIR 2026 [1]</small></div>
+      <div class="box"><div class="stat">~40%</div><p>más clics en simulaciones dirigidas a móviles que por correo.</p><small>Verizon DBIR 2026 [1]</small></div>
+      <div class="box"><div class="stat">3.8 M</div><p>ataques de phishing registrados durante 2025.</p><small>APWG [5]</small></div>
+      <div class="box"><div class="stat">~60%</div><p>de 4,875 incidentes analizados correspondieron a phishing.</p><small>ENISA 2025 [3]</small></div>
+    </div>
+    <div class="grid g3" style="margin-top:18px">
+      <div class="box"><h3>Capacitación sin contexto</h3><p>Una presentación explica el concepto, pero no reproduce la presión ni la apariencia de un ataque real.</p></div>
+      <div class="box"><h3>Sin forma de medir</h3><p>Sin campañas controladas no hay línea base para saber si el reconocimiento y el reporte mejoran.</p></div>
+      <div class="box"><h3>Una amenaza creciente</h3><p>APWG reportó un aumento de 10.1% en el segundo trimestre de 2026 frente al anterior [6].</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- SOLUCIÓN -->
+<section id="solucion" class="alt">
+  <div class="wrap">
+    <h2>Nuestra solución: simular, medir y enseñar</h2>
+    <p class="sub">Social Shield organiza campañas de phishing simulado por niveles de dificultad y técnicas de manipulación, registra cada interacción y entrega retroalimentación educativa en el momento exacto en que el usuario cae.</p>
+    <ol class="steps">
+      <li><div><b>Autorizar</b><span>Ninguna campaña se lanza sin aprobación explícita del responsable.</span></div></li>
+      <li><div><b>Diseñar</b><span>Se elige plantilla, técnica (urgencia, autoridad, recompensa…) y nivel 1–5.</span></div></li>
+      <li><div><b>Enviar</b><span>Los correos llegan solo al buzón de pruebas, con enlaces únicos por usuario.</span></div></li>
+      <li><div><b>Registrar</b><span>Se guardan eventos: enviado, clic y capacitación completada.</span></div></li>
+      <li><div><b>Enseñar</b><span>Tras el clic, una página explica las señales de alerta que se pasaron por alto.</span></div></li>
+    </ol>
+    <div class="grid g3">
+      <div class="box"><h3>5 niveles de dificultad</h3><p>Desde señales evidentes hasta mensajes que imitan comunicaciones internas reales, para comparar resultados de forma justa.</p></div>
+      <div class="box"><h3>Dashboard de resultados</h3><p>Gráficas por departamento, nivel y técnica para detectar patrones y orientar la concientización.</p></div>
+      <div class="box"><h3>Retroalimentación educativa</h3><p>Cada error se convierte en aprendizaje inmediato, no en castigo.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- SEGURIDAD -->
+<section id="seguridad">
+  <div class="wrap">
+    <h2>Ética por diseño</h2>
+    <p class="sub">Una simulación mal diseñada puede causar daño real. Por eso Social Shield opera solo en entornos autorizados, con minimización de datos y barreras técnicas obligatorias.</p>
+    <ul class="check">
+      <li><b>Cero credenciales reales.</b> <span>Nunca se almacenan contraseñas ni datos sensibles.</span></li>
+      <li><b>Bloqueo de dominios públicos.</b> <span>Los envíos a direcciones externas (p. ej. @gmail.com) se bloquean al 100%.</span></li>
+      <li><b>Buzón de pruebas aislado.</b> <span>Mailpit captura los correos dentro de una red aislada.</span></li>
+      <li><b>Kill switch.</b> <span>Cancela una campaña al instante e invalida todos sus enlaces.</span></li>
+      <li><b>Bitácora de auditoría.</b> <span>Cada acción del administrador queda registrada.</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- STACK -->
+<section class="alt">
+  <div class="wrap">
+    <h2>Tecnología</h2>
+    <p class="sub">Todo el entorno se levanta con un solo comando y usa exclusivamente herramientas libres o de código abierto, por lo que no requiere presupuesto de licencias.</p>
+    <div class="table">
+      <table>
+        <tr><th>Componente</th><th>Herramienta</th></tr>
+        <tr><td>Backend</td><td>Python + FastAPI</td></tr>
+        <tr><td>Base de datos</td><td>SQLite + SQLAlchemy</td></tr>
+        <tr><td>Interfaz</td><td>Jinja2 + JavaScript</td></tr>
+        <tr><td>Gráficas</td><td>Chart.js</td></tr>
+        <tr><td>Correo de prueba</td><td>Mailpit</td></tr>
+        <tr><td>Despliegue</td><td>Docker Compose</td></tr>
+        <tr><td>Colaboración</td><td>Git + GitHub</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- PLAN -->
+<section id="plan">
+  <div class="wrap">
+    <h2>Plan de 10 semanas</h2>
+    <p class="sub">El MVP se construye en etapas secuenciales y parcialmente paralelas. Revisamos el plan cada semana para detectar retrasos antes de que afecten la entrega.</p>
+    <div class="table">
+      <table>
+        <tr><th>Semana</th><th>Actividad</th><th>Hito</th></tr>
+        <tr><td>S1</td><td>Requisitos y autorización</td><td>M1 · Alcance y criterios de autorización</td></tr>
+        <tr><td>S2</td><td>Arquitectura y diseño UI</td><td>M2 · Arquitectura lista</td></tr>
+        <tr><td>S3–S4</td><td>Plataforma web base · Usuarios y control de acceso (S3)</td><td>M3 · Plataforma base disponible</td></tr>
+        <tr><td>S5–S6</td><td>Módulo de campañas</td><td></td></tr>
+        <tr><td>S7</td><td>Dificultad y retroalimentación · Registro y visualización</td><td>M4 · Funciones de simulación integradas</td></tr>
+        <tr><td>S8</td><td>Integración y pruebas de seguridad</td><td>M5 · Pruebas completadas</td></tr>
+        <tr><td>S9</td><td>Correcciones y validación</td><td></td></tr>
+        <tr><td>S10</td><td>Documentación y presentación</td><td>M6 · MVP validado y documentado</td></tr>
+      </table>
+    </div>
+
+    <h3 style="margin:50px 0 16px;font-size:1.3rem">Prioridades</h3>
+    <div class="grid g4 prio">
+      <div class="box"><h3>Esencial</h3><ul>
+        <li>Envío solo a Mailpit con bloqueo de dominios públicos</li>
+        <li>Autorización obligatoria antes de cada campaña</li>
+        <li>Kill switch</li>
+        <li>Registro de clics con enlaces únicos</li>
+        <li>Login seguro de administrador</li>
+        <li>Página educativa tras el clic</li></ul></div>
+      <div class="box"><h3>Importante</h3><ul>
+        <li>Clasificación en 5 niveles de dificultad</li>
+        <li>Dashboard por departamento y nivel</li>
+        <li>Bitácora de auditoría</li></ul></div>
+      <div class="box"><h3>Si hay tiempo</h3><ul>
+        <li>Reportes exportables</li>
+        <li>Comparación histórica de resultados</li></ul></div>
+      <div class="box"><h3>A futuro</h3><ul>
+        <li>SMS y llamadas</li>
+        <li>Apps de mensajería</li>
+        <li>Campañas adaptativas</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- EQUIPO -->
+<section id="equipo" class="alt">
+  <div class="wrap">
+    <h2>Equipo</h2>
+    <p class="sub">Seis estudiantes del grupo 3-C de TSU en Seguridad en Redes de la Universidad Politécnica de Yucatán. Cada etapa tiene un responsable y un apoyo, para que todo el equipo participe.</p>
+    <ul class="grid g3 team">
+      <li><b>Josué Isaías Arredondo Sosa</b><span>Requisitos y autorización · Pruebas de integración y seguridad</span></li>
+      <li><b>Moises Addiel Canul Uicab</b><span>Arquitectura e interfaz · Módulo de campañas</span></li>
+      <li><b>Ángel Caamal Sosa</b><span>Usuarios autorizados y control de acceso</span></li>
+      <li><b>Ismael Adán Villegas García</b><span>Plataforma web base · Correcciones y validación</span></li>
+      <li><b>Jorge Luis Ojeda Ibarra</b><span>Registro de eventos y visualizaciones</span></li>
+      <li><b>Rodrigo Euan Hernández</b><span>Dificultad y retroalimentación · Documentación</span></li>
+    </ul>
+    <p style="color:var(--muted);margin-top:22px">Asesor académico: <b style="color:var(--text)">Juan Hoy Benitez</b>, quien revisa y valida los entregables en cada hito.</p>
+  </div>
+</section>
+
+<!-- VISIÓN -->
+<section>
+  <div class="wrap">
+    <h2>Visión</h2>
+    <p class="sub">No inventamos la simulación de phishing: la hacemos accesible para PyMEs e instituciones educativas que no pueden pagar soluciones comerciales, con un piloto inicial de 100 empleados por organización.</p>
+    <div class="grid g2">
+      <div class="box"><h3>Ahora (MVP)</h3>
+        <ul class="check" style="margin-top:10px"><li>Campañas por correo electrónico</li><li>Gestión de usuarios autorizados</li><li>Niveles de dificultad y técnicas</li><li>Registro de interacciones</li><li>Retroalimentación educativa</li><li>Visualizaciones básicas</li></ul>
+      </div>
+      <div class="box"><h3>Después</h3>
+        <ul class="check" style="margin-top:10px"><li>Nuevos canales: SMS, llamadas, mensajería</li><li>Campañas adaptativas según debilidades del grupo</li><li>Métricas históricas y comparación temporal</li><li>Análisis por técnica de manipulación</li><li>Generación de reportes</li></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div>
+      <p style="color:var(--text);font-weight:700;margin-bottom:8px">Social Shield</p>
+      <p>Proyecto Integrador · Universidad Politécnica de Yucatán · Grupo 3-C · TSU Seguridad en Redes.</p>
+      <p style="margin-top:10px">Proyecto académico en etapa de desarrollo. Opera únicamente en entornos de prueba autorizados.</p>
+    </div>
+    <div>
+      <p style="color:var(--text);font-weight:600;margin-bottom:8px">Fuentes</p>
+      <ol>
+        <li><a href="https://www.verizon.com/business/resources/reports/dbir/" target="_blank" rel="noopener">Verizon · 2026 DBIR</a></li>
+        <li><a href="https://www.nist.gov/itl/smallbusinesscyber/guidance-topic/phishing" target="_blank" rel="noopener">NIST · Phishing</a></li>
+        <li><a href="https://www.enisa.europa.eu/publications/enisa-threat-landscape-2025" target="_blank" rel="noopener">ENISA · Threat Landscape 2025</a></li>
+        <li><a href="https://doi.org/10.6028/NIST.TN.2276" target="_blank" rel="noopener">NIST · Phish Scale User Guide</a></li>
+        <li><a href="https://docs.apwg.org/reports/apwg_trends_report_q4_2025.pdf" target="_blank" rel="noopener">APWG · Trends Report Q4 2025</a></li>
+        <li><a href="https://apwg.org/trendreports" target="_blank" rel="noopener">APWG · Summary Q2 2026</a></li>
+        <li><a href="https://www.fbi.gov/file-repository/2025_ic3report.pdf" target="_blank" rel="noopener">FBI IC3 · 2025 Internet Crime Report</a></li>
+      </ol>
+    </div>
+  </div>
+  <p class="copy">© 2026 Social Shield · Hecho en Yucatán</p>
+</footer>
+
+<script>
+document.querySelectorAll('.links a').forEach(a=>a.addEventListener('click',()=>document.querySelector('.links').classList.remove('open')));
+</script>
+</body>
+</html>
